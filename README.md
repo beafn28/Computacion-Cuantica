@@ -13,7 +13,7 @@ Desde la **teoría básica** hasta la implementación de **algoritmos cuánticos
 
 ### Temas que irán apareciendo:
 
-- 🌱 **Introducción a los qubits**: ¿Qué son? ¿Cómo piensan? 🤔
+- 🌱 **Introducción a los qubits**: ¿Qué son? ¿Cómo piensan? 
 - 🌀 **Entrelazamiento cuántico**: Cuando dos qubits están más unidos que tú y tu mejor amigo/a.
 - 🏗️ **Puertas cuánticas**: Construyendo operaciones mágicas sobre qubits.
 - 📊 **Algoritmos cuánticos**: Rompiendo códigos y encontrando agujas en pajares cuánticos.
