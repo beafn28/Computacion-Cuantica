@@ -1,7 +1,7 @@
-# 🌌 Apuntes de Computación Cuántica 🧠💻
+# 🌌 Apuntes de Computación Cuántica 💻
 
-¡Bienvenido/a a mi espacio cuántico! 🚀✨  
-Aquí encontrarás **mis apuntes** sobre **Computación Cuántica**, donde cada bit no es solo 0 o 1, sino ¡ambos a la vez! 🌀🔮  
+¡Bienvenido/a a mi espacio cuántico! ✨  
+Aquí encontrarás **mis apuntes** sobre **Computación Cuántica**, donde cada bit no es solo 0 o 1, sino ¡ambos a la vez! 🔮 
 Voy a estar **subiendo lo que voy aprendiendo** sobre este fascinante mundo de qubits, entrelazamientos y puertas cuánticas, así que **quédate atento/a** porque la información aquí ¡fluctúa más que un estado cuántico!
 
 
@@ -13,7 +13,7 @@ Desde la **teoría básica** hasta la implementación de **algoritmos cuánticos
 
 ### Temas que irán apareciendo:
 
-- 🌱 **Introducción a los qubits**: ¿Qué son? ¿Cómo piensan? 🤔
+- 🌱 **Introducción a los qubits**: ¿Qué son? ¿Cómo piensan? 
 - 🌀 **Entrelazamiento cuántico**: Cuando dos qubits están más unidos que tú y tu mejor amigo/a.
 - 🏗️ **Puertas cuánticas**: Construyendo operaciones mágicas sobre qubits.
 - 📊 **Algoritmos cuánticos**: Rompiendo códigos y encontrando agujas en pajares cuánticos.
