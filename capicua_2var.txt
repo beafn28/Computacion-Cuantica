@@ -1,0 +1,43 @@
+#Implementación de un circuito cuántico que verifica si una cadena binaria de dos bits es capicúa utilizando un qubit auxiliar.
+import pennylane as qml
+from pennylane import numpy as np
+
+# Defino un dispositivo con 3 qubits (2 para a y b, y 1 auxiliar para la salida) y shots=1
+dev = qml.device('default.qubit', wires=3, shots=1)
+
+@qml.qnode(dev)
+def U_circuit(params):
+    # Preparo los qubits a y b
+    if params[0] == 1:
+        qml.PauliX(wires=0)  # Si a=1, aplico X al qubit a
+    if params[1] == 1:
+        qml.PauliX(wires=1)  # Si b=1, aplico X al qubit b
+    
+    # Compruebo si la cadena es capicúa
+    # Si a == b, el qubit auxiliar debe ser 1
+    qml.CNOT(wires=[0, 2])  # Copia el qubit 'a' al qubit auxiliar
+    qml.CNOT(wires=[1, 2])  # Realiza la operación XOR con el qubit 'b'
+
+    # Invierto el qubit auxiliar al final para que sea 1 cuando a=b
+    qml.PauliX(wires=2)  # Invierto el qubit auxiliar para reflejar capicúa correctamente
+
+    # Mido el estado final del qubit auxiliar y dejo los otros sin cambios
+    return qml.sample(wires=[0, 1, 2])
+
+def es_capicua(result):
+    # Interpreto el resultado: si el qubit auxiliar es 1, es capicúa
+    if result[2] == 1:
+        return "La cadena es capicúa"
+    else:
+        return "La cadena NO es capicúa"
+
+# Pruebo las 4 combinaciones posibles de dos variables (a, b)
+for params in [[0, 0], [0, 1], [1, 0], [1, 1]]:
+    resultado = U_circuit(params)
+    # Mostrar el resultado en el formato deseado
+    print(f"U|{resultado[0]}{resultado[1]}>|0> = |{resultado[0]}{resultado[1]}>|{resultado[2]}> - {es_capicua(resultado)}")
+
+# Dibujo el circuito para una de las combinaciones (por ejemplo, a=1, b=1)
+params = [1, 1]
+drawer = qml.draw(U_circuit)
+print(drawer(params))
