@@ -1,0 +1,46 @@
+import pennylane as qml
+from pennylane import numpy as np
+
+# Defino un dispositivo con 6 qubits (5 para a, b, c, d, e y 1 auxiliar para la salida) con 1 shot
+dev = qml.device('default.qubit', wires=6, shots=1)
+
+@qml.qnode(dev)
+def U_circuit(params):
+    # Aplico las puertas X (NOT) si es necesario para preparar los valores a, b, c, d, e
+    for i in range(5):
+        if params[i] == 1:
+            qml.PauliX(wires=i)  # Aplicamos X al qubit correspondiente
+    
+    # Comparaciones: a <-> e, b <-> d
+    qml.CNOT(wires=[0, 5])  # a -> qubit auxiliar (wires[5])
+    qml.CNOT(wires=[4, 5])  # e -> qubit auxiliar (wires[5])
+    
+    qml.CNOT(wires=[1, 5])  # b -> qubit auxiliar (wires[5])
+    qml.CNOT(wires=[3, 5])  # d -> qubit auxiliar (wires[5])
+    
+    # Invierto el qubit auxiliar al final si es necesario para reflejar el resultado correctamente
+    qml.PauliX(wires=5)
+    
+    # Mido todos los qubits
+    return qml.sample(wires=range(6))
+
+# Función para interpretar si la cadena es capicúa
+def es_capicua(result):
+    # Si el qubit auxiliar es 1, es capicúa; si es 0, no lo es.
+    return "La cadena es capicúa" if result[5] == 1 else "La cadena NO es capicúa"
+
+# Genero todas las combinaciones posibles de cinco variables (a, b, c, d, e)
+combinaciones = [[(i >> j) & 1 for j in range(5)] for i in range(32)]
+
+# Pruebo cada combinación y mostramos el resultado en el formato deseado
+for params in combinaciones:
+    resultado = U_circuit(params)
+    # Formato de salida más claro
+    cadena_entrada = ''.join(map(str, params))
+    estado_salida = resultado[5]
+    print(f"U|{cadena_entrada}>|0> = |{cadena_entrada}>|{estado_salida}> - {es_capicua(resultado)}")
+
+# Dibujo el circuito para una combinación de ejemplo (por ejemplo, a=1, b=0, c=1, d=0, e=1)
+params = [1, 0, 1, 0, 1]
+drawer = qml.draw(U_circuit)
+print(drawer(params))
