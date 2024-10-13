@@ -1,0 +1,71 @@
+#Implementación del Algoritmo de Grover en un sistema de 5 qubits utilizando Pennylane.
+#El código construye y simula un circuito cuántico en el que se realiza el Algoritmo de Grover para encontrar un estado objetivo (en este caso, el estado 11111) en una superposición de 32 estados (2⁵). El circuito aplica iteraciones del oráculo (que invierte la fase del estado objetivo) y un difusor (que amplifica la probabilidad del estado objetivo). Luego, se calculan las probabilidades de cada estado posible y se determina cuál tiene la mayor probabilidad. Finalmente, se genera una gráfica que muestra la distribución de probabilidades de los estados cuánticos.
+
+import pennylane as qml
+import matplotlib.pyplot as plt
+from pennylane import numpy as np
+
+dev = qml.device('default.qubit', wires=5)
+
+def multi_controlled_z(control_wires, target_wire):
+    # Paso 1: Aplicar Hadamard al qubit objetivo 
+    qml.Hadamard(wires=target_wire)
+    
+
+    qml.MultiControlledX(wires=control_wires + [target_wire])
+    
+    qml.Hadamard(wires=target_wire)
+
+
+def diffuser():
+    # Paso 1: Aplicar Hadamard a todos los qubits
+    for i in range(5):
+        qml.Hadamard(wires=i)
+
+    # Paso 2: Aplicar Pauli-X a todos los qubits
+    for i in range(5):
+        qml.PauliX(wires=i)
+
+    # Paso 3: Aplicar una puerta multi-controlada Z 
+    multi_controlled_z(control_wires=[0, 1, 2, 3], target_wire=4)  # Control en los primeros 4 qubits, Z en el último qubit
+
+    # Paso 4: Aplicar Pauli-X de nuevo para revertir
+    for i in range(5):
+        qml.PauliX(wires=i)
+
+    # Paso 5: Aplicar Hadamard de nuevo
+    for i in range(5):
+        qml.Hadamard(wires=i)
+
+
+@qml.qnode(dev)
+def grover_algorithm():
+    # Paso 1: Aplicar Hadamard a todos los qubits para crear la superposición 
+    for i in range(5):
+        qml.Hadamard(wires=i)
+
+    # Realizo 2 iteraciones del algoritmo de Grover
+    for _ in range(2):
+        # Paso 2: Aplicar el oráculo. Uso FlipSign para el estado 31.
+        qml.FlipSign(31, wires=range(5))
+
+        # Paso 3: Aplicar el difusor
+        diffuser()
+
+    # Paso 4: Devuelvo las probabilidades de medir cada estado
+    return qml.probs(wires=range(5))
+
+# Ejecuto el algoritmo
+output_probs = grover_algorithm()
+
+# Imprimo las probabilidades de todos los estados.
+print(f"Probabilidades de los estados: {output_probs}")
+
+# Encuentro el índice del estado más probable y lo imprimo
+most_probable_state = np.argmax(output_probs)
+print(f"El estado más probable es: {format(most_probable_state, '05b')}")
+# Crear el gráfico de barras con las probabilidades
+plt.bar(range(len(output_probs)), output_probs)
+
+# Mostrar la gráfica
+plt.show()
