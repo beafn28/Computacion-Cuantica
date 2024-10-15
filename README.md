@@ -1,4 +1,4 @@
-# 🌌 Apuntes de Computación Cuántica 💻
+# Apuntes de Computación Cuántica 
 
 ¡Bienvenido/a a mi espacio cuántico! ✨  
 Aquí encontrarás **mis apuntes** sobre **Computación Cuántica**, donde cada bit no es solo 0 o 1, sino ¡ambos a la vez! 🔮 
